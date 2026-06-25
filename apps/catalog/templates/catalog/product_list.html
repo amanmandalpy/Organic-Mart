@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Shop Organic Products — OrganicMart{% endblock %}
+{% block meta_description %}Search and buy organic fruits, vegetables, grains, honey, spices, tea, dry fruits, and herbal products.{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="catalog-hero">
+    <div class="container py-5">
+        <div class="row align-items-end g-4">
+            <div class="col-lg-7">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Organic products</p>
+                <h1>Shop fresh, certified organic essentials.</h1>
+                <p>Use search, category filters, sorting, product details, wishlist, and cart actions in a production-style shopping flow.</p>
+            </div>
+            <div class="col-lg-5">
+                <form class="catalog-search" method="get" action="{% url 'catalog:product-list' %}" data-live-search data-suggestions-url="{% url 'catalog:search-suggestions' %}">
+                    <label class="visually-hidden" for="catalog-search">Search products</label>
+                    <input id="catalog-search" class="form-control" type="search" name="q" value="{{ query }}" placeholder="Search honey, fruits, spices...">
+                    <button class="btn btn-brand" type="submit">Search</button>
+                    <div class="live-suggestions" data-live-search-results></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space" id="catalog-results">
+    <div class="container">
+        <div class="catalog-toolbar">
+            <div class="category-pills">
+                <a class="{% if not current_category %}is-active{% endif %}" href="{% url 'catalog:product-list' %}">All</a>
+                {% for category in categories %}
+                    <a class="{% if current_category == category.slug %}is-active{% endif %}" href="{{ category.get_absolute_url }}">{{ category.icon }} {{ category.name }}</a>
+                {% endfor %}
+            </div>
+            <form method="get" class="sort-form">
+                {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+                {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                <label for="sort">Sort</label>
+                <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="featured" {% if sort == "featured" %}selected{% endif %}>Featured</option>
+                    <option value="price-low" {% if sort == "price-low" %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price-high" {% if sort == "price-high" %}selected{% endif %}>Price: High to Low</option>
+                    <option value="rating" {% if sort == "rating" %}selected{% endif %}>Top Rated</option>
+                    <option value="newest" {% if sort == "newest" %}selected{% endif %}>Newest</option>
+                </select>
+            </form>
+        </div>
+
+        <p class="catalog-count">{{ result_count }} products found{% if query %} for “{{ query }}”{% endif %}</p>
+
+        <div class="row g-4 mt-1">
+            {% for product in products %}
+                <div class="col-sm-6 col-xl-4">
+                    {% include "catalog/partials/product_card.html" with product=product %}
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <h2>No products found</h2>
+                        <p>Try a different search or remove category filters.</p>
+                        <a class="btn btn-brand" href="{% url 'catalog:product-list' %}">Reset filters</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+            <nav class="pagination-wrap" aria-label="Product pagination">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-soft" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-soft" href="?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

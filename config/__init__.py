@@ -1,0 +1,1 @@
+"""OrganicMart project configuration package."""

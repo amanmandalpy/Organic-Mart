@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} — OrganicMart{% endblock %}
+{% block meta_description %}{{ product.short_description }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+    <div class="container py-5">
+        <nav class="small mb-4" aria-label="Breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a> /
+            <a href="{% url 'catalog:product-list' %}">Products</a> /
+            <span>{{ product.name }}</span>
+        </nav>
+
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="product-detail__media">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <span>{{ product.image_emoji }}</span>
+                    {% endif %}
+                    {% if product.discount_percent %}<strong>{{ product.discount_percent }}% OFF</strong>{% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> {{ product.category.name }}</p>
+                <h1>{{ product.name }}</h1>
+                <p class="product-detail__summary">{{ product.description }}</p>
+
+                <div class="rating-row">
+                    <span>★ {{ product.rating_average }}</span>
+                    <small>{{ product.rating_count }} verified reviews</small>
+                </div>
+
+                <div class="product-detail__price">
+                    <strong>₹{{ product.final_price }}</strong>
+                    {% if product.discount_percent %}
+                        <span>MRP ₹{{ product.price }}</span>
+                        <em>You save ₹{{ product.savings }}</em>
+                    {% endif %}
+                </div>
+
+                <dl class="product-facts">
+                    <div><dt>Seller</dt><dd>{{ product.seller_name }}</dd></div>
+                    <div><dt>SKU</dt><dd>{{ product.sku }}</dd></div>
+                    <div><dt>Pack</dt><dd>{{ product.package_size }}</dd></div>
+                    <div><dt>Origin</dt><dd>{{ product.origin }}</dd></div>
+                    <div><dt>Certification</dt><dd>{{ product.organic_certification }}</dd></div>
+                    <div><dt>Stock</dt><dd>{{ product.stock }} available</dd></div>
+                </dl>
+
+                <div class="product-actions">
+                    <form method="post" action="{% url 'cart:add' product.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'cart:detail' %}">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <div class="quantity-action">
+                            <input id="quantity" class="form-control" type="number" name="quantity" min="1" max="{{ product.stock }}" value="1">
+                            <button class="btn btn-brand" type="submit" {% if not product.is_in_stock %}disabled{% endif %}>Add to cart</button>
+                        </div>
+                    </form>
+                    <form method="post" action="{% url 'cart:wishlist-add' product.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button class="btn btn-soft w-100" type="submit">Add to wishlist</button>
+                    </form>
+                </div>
+
+                <div class="delivery-box">
+                    <strong>Delivery & returns</strong>
+                    <p>Delivery usually takes 2-4 days in major cities. Return policy: unopened products can be returned within 7 days.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space section-soft">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="info-panel h-100">
+                    <h2>Benefits</h2>
+                    <ul>
+                        {% for benefit in product.benefit_list %}
+                            <li>{{ benefit }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="info-panel h-100">
+                    <h2>Ingredients</h2>
+                    <ul>
+                        {% for ingredient in product.ingredient_list %}
+                            <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-panel mt-5">
+            <div class="d-flex justify-content-between gap-3 align-items-center mb-3">
+                <h2 class="mb-0">Verified reviews</h2>
+                <span>Average rating: {{ product.rating_average }}/5</span>
+            </div>
+            <div class="row g-4">
+                {% for review in approved_reviews %}
+                    <div class="col-md-6">
+                        <article class="review-card h-100">
+                            <strong>★ {{ review.rating }} — {{ review.title }}</strong>
+                            <p>{{ review.body }}</p>
+                            <small>{{ review.reviewer_name }} · Verified purchase</small>
+                        </article>
+                    </div>
+                {% empty %}
+                    <p>No reviews yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if related_products %}
+<section class="section-space">
+    <div class="container">
+        <div class="section-heading mb-4">
+            <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Related products</p>
+            <h2>You may also like</h2>
+        </div>
+        <div class="row g-4">
+            {% for product in related_products %}
+                <div class="col-sm-6 col-lg-3">
+                    {% include "catalog/partials/product_card.html" with product=product %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

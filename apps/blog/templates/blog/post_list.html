@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Organic Blog - OrganicMart{% endblock %}
+{% block meta_description %}Read OrganicMart blogs about organic certifications, product benefits, ingredients, seasonal buying, and healthy living.{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-4 align-items-lg-end mb-5">
+            <div class="section-heading">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Organic blog</p>
+                <h1>Guides for cleaner, more confident shopping.</h1>
+                <p>Learn about organic certifications, ingredients, health benefits, seasonal buying, and seller transparency.</p>
+            </div>
+            <form class="catalog-search blog-search" action="{% url 'blog:post-list' %}" method="get">
+                <input class="form-control" type="search" name="q" value="{{ query }}" placeholder="Search blogs">
+                <button class="btn btn-brand" type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="category-pills mb-4">
+            <a href="{% url 'blog:post-list' %}" class="{% if not active_category %}is-active{% endif %}">All</a>
+            {% for category in categories %}
+                <a href="{% url 'blog:post-list' %}?category={{ category.slug }}" class="{% if active_category == category.slug %}is-active{% endif %}">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="row g-4">
+            {% for post in posts %}
+                <div class="col-md-6 col-xl-4">
+                    <article class="blog-card h-100">
+                        {% if post.featured_image %}
+                            <a class="blog-card__media" href="{{ post.get_absolute_url }}">
+                                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" loading="lazy">
+                            </a>
+                        {% endif %}
+                        <span>{{ post.category.name }}</span>
+                        <h2>{{ post.title }}</h2>
+                        <p>{{ post.excerpt }}</p>
+                        <small>{{ post.published_at|date:"M d, Y" }}</small>
+                        <a href="{{ post.get_absolute_url }}">Read blog</a>
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <h2>No published blogs yet.</h2>
+                        <p>Publish blog posts from the Django admin panel and they will appear here automatically.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

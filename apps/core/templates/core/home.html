@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}OrganicMart — Organic Products Marketplace{% endblock %}
+{% block meta_description %}Buy fresh fruits, vegetables, honey, grains, spices, tea, and herbal organic products on OrganicMart.{% endblock %}
+{% block og_title %}OrganicMart — Organic Products Marketplace{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/home.css' %}">
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="hero-section overflow-hidden">
+    <div class="hero-section__orb hero-section__orb--one" aria-hidden="true"></div>
+    <div class="hero-section__orb hero-section__orb--two" aria-hidden="true"></div>
+    <div class="container position-relative py-5">
+        <div class="row align-items-center g-5 py-lg-5">
+            <div class="col-lg-7">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Certified organic marketplace</p>
+                <h1 class="display-title">Fresh organic products, delivered with trust.</h1>
+                <p class="hero-section__lead mt-4">OrganicMart helps customers discover verified organic sellers, compare product details, read benefits, and place orders through a polished ecommerce experience.</p>
+                <div class="d-flex flex-column flex-sm-row gap-3 mt-4 pt-2">
+                    <a class="btn btn-brand btn-lg" href="{% url 'catalog:product-list' %}">Explore products</a>
+                    <a class="btn btn-soft btn-lg" href="{% url 'core:sell-center' %}">Become a seller</a>
+                </div>
+                <ul class="hero-proof list-unstyled d-flex flex-wrap gap-4 mt-5 mb-0" aria-label="Marketplace commitments">
+                    <li><span class="proof-icon" aria-hidden="true">✓</span> Verified sellers</li>
+                    <li><span class="proof-icon" aria-hidden="true">✓</span> Organic certifications</li>
+                    <li><span class="proof-icon" aria-hidden="true">✓</span> Secure checkout flow</li>
+                </ul>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-visual" aria-label="Organic products showcase">
+                    <div class="hero-visual__leaf hero-visual__leaf--one" aria-hidden="true"></div>
+                    <div class="hero-visual__leaf hero-visual__leaf--two" aria-hidden="true"></div>
+                    <div class="hero-visual__card hero-visual__card--main">
+                        <span class="hero-visual__label">TODAY'S ORGANIC PICKS</span>
+                        <strong>Fresh fruits, honey, spices, grains and herbal care</strong>
+                        <p>Browse product listings, details, cart, wishlist, coupon checkout, blog content, and seller tools in one polished marketplace.</p>
+                    </div>
+                    <div class="hero-visual__card hero-visual__card--small">
+                        <span class="hero-visual__sprout" aria-hidden="true">🛒</span>
+                        <span><strong>Shopping flow ready</strong><small>Browse → Cart → Checkout</small></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="trust-strip" aria-label="OrganicMart principles">
+    <div class="container">
+        <div class="row g-0 text-center">
+            <div class="col-6 col-lg-3 trust-strip__item"><strong>8+</strong><span>organic categories</span></div>
+            <div class="col-6 col-lg-3 trust-strip__item"><strong>Ready</strong><span>cart and checkout</span></div>
+            <div class="col-6 col-lg-3 trust-strip__item"><strong>Verified</strong><span>product facts</span></div>
+            <div class="col-6 col-lg-3 trust-strip__item"><strong>Responsive</strong><span>mobile UI</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div class="section-heading">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Shop by category</p>
+                <h2>Everything organic in one clean marketplace.</h2>
+            </div>
+            <a class="btn btn-soft" href="{% url 'catalog:product-list' %}">View all categories</a>
+        </div>
+        <div class="category-grid">
+            {% for category in featured_categories %}
+                <a class="category-tile" href="{{ category.get_absolute_url }}">
+                    <span>{{ category.icon }}</span>
+                    <strong>{{ category.name }}</strong>
+                    <small>{{ category.description|truncatechars:72 }}</small>
+                </a>
+            {% empty %}
+                <p>No categories added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% if spotlight_slides %}
+<section class="section-space section-soft">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div class="section-heading">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Seasonal spotlight</p>
+                <h2>Fresh product highlights that rotate automatically.</h2>
+            </div>
+        </div>
+
+        <div
+            id="homepageSpotlightCarousel"
+            class="carousel slide spotlight-carousel"
+            data-bs-ride="carousel"
+            data-bs-interval="3200"
+            data-bs-touch="true"
+            data-bs-pause="false"
+        >
+            <div class="carousel-indicators">
+                {% for slide in spotlight_slides %}
+                    <button
+                        type="button"
+                        data-bs-target="#homepageSpotlightCarousel"
+                        data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %}active{% endif %}"
+                        {% if forloop.first %}aria-current="true"{% endif %}
+                        aria-label="Slide {{ forloop.counter }}"
+                    ></button>
+                {% endfor %}
+            </div>
+
+            <div class="carousel-inner">
+                {% for slide in spotlight_slides %}
+                    {% with product=slide.product %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="spotlight-slide">
+                            <div class="row align-items-center g-4">
+                                <div class="col-lg-6">
+                                    <div class="spotlight-slide__media">
+                                        {% if product.image %}
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                                        {% else %}
+                                            <img src="{% static slide.fallback_image %}" alt="{{ product.name }}" loading="lazy">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p class="eyebrow mb-3"><span aria-hidden="true">●</span> {{ product.category.name }}</p>
+                                    <h3>{{ product.name }}</h3>
+                                    <p>{{ product.short_description }}</p>
+                                    <div class="spotlight-slide__price">
+                                        <strong>₹{{ product.final_price }}</strong>
+                                        {% if product.discount_percent %}
+                                            <span>Save {{ product.discount_percent }}%</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-3 mt-4">
+                                        <a class="btn btn-brand" href="{{ product.get_absolute_url }}">View product</a>
+                                        <form method="post" action="{% url 'cart:add' product.pk %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="next" value="{% url 'cart:detail' %}">
+                                            <button class="btn btn-soft" type="submit">Add to cart</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homepageSpotlightCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#homepageSpotlightCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section-space section-soft">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div class="section-heading">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Featured products</p>
+                <h2>Client-ready product cards with working buttons.</h2>
+            </div>
+            <a class="btn btn-brand" href="{% url 'catalog:product-list' %}">Shop all products</a>
+        </div>
+        <div class="row g-4">
+            {% for product in featured_products %}
+                <div class="col-sm-6 col-lg-4">
+                    {% include "catalog/partials/product_card.html" with product=product %}
+                </div>
+            {% empty %}
+                <p>No products added yet. Add products from the Django admin panel to publish them here.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <article class="audience-card h-100">
+                    <span class="audience-card__number">01</span>
+                    <h3>Customer flow</h3>
+                    <p>Search products, filter categories, open details, add to cart, wishlist, apply coupon, and checkout.</p>
+                    <a class="stretched-link" href="{% url 'catalog:product-list' %}">Start shopping</a>
+                </article>
+            </div>
+            <div class="col-lg-4">
+                <article class="audience-card h-100 audience-card--accent">
+                    <span class="audience-card__number">02</span>
+                    <h3>Seller center</h3>
+                    <p>Sellers can understand product uploads, inventory, orders, and revenue workflows.</p>
+                    <a class="stretched-link" href="{% url 'core:sell-center' %}">Open seller center</a>
+                </article>
+            </div>
+            <div class="col-lg-4">
+                <article class="audience-card h-100">
+                    <span class="audience-card__number">03</span>
+                    <h3>Organic blog</h3>
+                    <p>Blog pages explain product benefits, organic buying tips, and seller stories for SEO content.</p>
+                    <a class="stretched-link" href="{% url 'blog:post-list' %}">Read blog</a>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space section-soft">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Why choose OrganicMart</p>
+                <h2 class="section-title">A premium organic shopping experience.</h2>
+                <p class="section-copy">OrganicMart now supports the real customer journey: product discovery, account access, trust information, cart, wishlist, coupons, checkout, and admin-managed content.</p>
+            </div>
+            <div class="col-lg-7">
+                <div class="principle-grid">
+                    <article><span>01</span><div><h3>Certified products</h3><p>Certification and ingredient details are visible on product pages.</p></div></article>
+                    <article><span>02</span><div><h3>Fast buying flow</h3><p>Buttons are active and guide users through cart and checkout.</p></div></article>
+                    <article><span>03</span><div><h3>Mobile responsive</h3><p>Bootstrap layout works across phone, tablet, and desktop screens.</p></div></article>
+                    <article><span>04</span><div><h3>Scalable foundation</h3><p>Django models, URLs, auth, admin tools, and APIs are structured for production growth.</p></div></article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div class="section-heading">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Latest blogs</p>
+                <h2>Content that supports organic buying decisions.</h2>
+            </div>
+            <a class="btn btn-soft" href="{% url 'blog:post-list' %}">View all blogs</a>
+        </div>
+        <div class="row g-4">
+            {% for post in latest_posts %}
+                <div class="col-md-4">
+                    <article class="blog-card h-100">
+                        <span>{{ post.category.name }}</span>
+                        <h3>{{ post.title }}</h3>
+                        <p>{{ post.excerpt }}</p>
+                        <a href="{{ post.get_absolute_url }}">Read more</a>
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <h3>No blogs published yet.</h3>
+                        <p>Publish blogs from the admin panel and they will appear here automatically.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="newsletter-band">
+    <div class="container">
+        <div class="newsletter-card">
+            <div>
+                <p class="eyebrow mb-2"><span aria-hidden="true">●</span> Newsletter</p>
+                <h2>Get organic deals and seasonal tips.</h2>
+            </div>
+            <form class="newsletter-form" action="{% url 'blog:post-list' %}">
+                <label class="visually-hidden" for="newsletter-email">Email</label>
+                <input id="newsletter-email" class="form-control" type="email" placeholder="Enter your email">
+                <button class="btn btn-brand" type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

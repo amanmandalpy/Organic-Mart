@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Account - OrganicMart{% endblock %}
+{% block meta_description %}Create an OrganicMart customer account to manage profile, wishlist, cart, and orders.{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space auth-shell">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-xl-6">
+                <div class="auth-card">
+                    <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Customer account</p>
+                    <h1>Create your OrganicMart account.</h1>
+                    <p class="section-copy">Save your profile details, manage wishlist items, and move faster through checkout.</p>
+
+                    <form method="post" class="auth-form mt-4" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                        {% endif %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                                {{ form.first_name }}
+                                {{ form.first_name.errors }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                                {{ form.last_name }}
+                                {{ form.last_name.errors }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.email.id_for_label }}">Email address</label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.phone_number.id_for_label }}">Phone number</label>
+                                {{ form.phone_number }}
+                                {{ form.phone_number.errors }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.password1.id_for_label }}">Password</label>
+                                {{ form.password1 }}
+                                {{ form.password1.errors }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm password</label>
+                                {{ form.password2 }}
+                                {{ form.password2.errors }}
+                            </div>
+                        </div>
+                        <button class="btn btn-brand btn-lg w-100 mt-4" type="submit">Create account</button>
+                    </form>
+
+                    <p class="auth-card__switch mt-4 mb-0">
+                        Already have an account?
+                        <a href="{% url 'accounts:login' %}">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

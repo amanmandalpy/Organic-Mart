@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Seller Center - OrganicMart{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Seller center</p>
+                <h1 class="page-title">Sell certified organic products with confidence.</h1>
+                <p class="section-copy">OrganicMart gives sellers a clear workflow for product uploads, certification review, stock control, order management, and revenue analytics.</p>
+                <div class="d-flex gap-3 flex-wrap mt-4">
+                    <a class="btn btn-brand" href="{% url 'catalog:product-list' %}">View marketplace</a>
+                    <a class="btn btn-soft" href="{% url 'accounts:register' %}">Create seller account</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="seller-dashboard">
+                    <div><span>Total revenue</span><strong>₹84,250</strong><small>+18% this month</small></div>
+                    <div><span>Active products</span><strong>42</strong><small>6 need restock</small></div>
+                    <div><span>Orders today</span><strong>27</strong><small>9 ready to ship</small></div>
+                    <div><span>Rating</span><strong>4.8★</strong><small>Verified reviews</small></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-5">
+            <div class="col-md-4"><div class="info-panel h-100"><h2>Add products</h2><p>Upload product name, category, price, stock, images, benefits, ingredients, and organic certificate.</p></div></div>
+            <div class="col-md-4"><div class="info-panel h-100"><h2>Manage orders</h2><p>Accept orders, update processing/shipped/delivered status, and notify customers automatically.</p></div></div>
+            <div class="col-md-4"><div class="info-panel h-100"><h2>Track analytics</h2><p>Understand product views, conversion rate, revenue, low-stock alerts, and customer feedback.</p></div></div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Account - OrganicMart{% endblock %}
+{% block meta_description %}Manage your OrganicMart customer profile, wishlist, cart, and account details.{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-5">
+                <p class="eyebrow mb-3"><span aria-hidden="true">●</span> My account</p>
+                <h1 class="page-title">Welcome, {{ request.user.first_name|default:request.user.email }}.</h1>
+                <p class="section-copy">Manage your profile and continue the OrganicMart buying journey.</p>
+                <div class="account-dashboard-grid mt-4">
+                    <a href="{% url 'cart:detail' %}"><strong>Cart</strong><span>{{ cart_item_count }} items</span></a>
+                    <a href="{% url 'cart:wishlist' %}"><strong>Wishlist</strong><span>Saved products</span></a>
+                    <a href="{% url 'catalog:product-list' %}"><strong>Products</strong><span>Continue shopping</span></a>
+                    <a href="{% url 'core:order-success' %}"><strong>Orders</strong><span>Track purchases</span></a>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="auth-card">
+                    <h2>Profile details</h2>
+                    <p class="section-copy">Your email is used for login and can be changed by an administrator.</p>
+                    <form method="post" class="auth-form mt-4">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                                {{ form.first_name }}
+                                {{ form.first_name.errors }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                                {{ form.last_name }}
+                                {{ form.last_name.errors }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Email address</label>
+                                <input class="form-control" value="{{ request.user.email }}" disabled>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.phone_number.id_for_label }}">Phone number</label>
+                                {{ form.phone_number }}
+                                {{ form.phone_number.errors }}
+                            </div>
+                        </div>
+                        <button class="btn btn-brand mt-4" type="submit">Save profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

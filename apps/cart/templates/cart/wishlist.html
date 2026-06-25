@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Wishlist — OrganicMart{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="section-heading mb-4">
+            <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Wishlist</p>
+            <h1>Saved organic products</h1>
+        </div>
+        <div class="row g-4">
+            {% for product in products %}
+                <div class="col-sm-6 col-lg-4">
+                    {% include "catalog/partials/product_card.html" with product=product %}
+                    <form method="post" action="{% url 'cart:wishlist-remove' product.pk %}" class="mt-2">
+                        {% csrf_token %}
+                        <button class="btn btn-soft w-100" type="submit">Remove from wishlist</button>
+                    </form>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>No wishlist items yet</h2>
+                    <p>Open any product and click “Add to wishlist”.</p>
+                    <a class="btn btn-brand" href="{% url 'catalog:product-list' %}">Browse products</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Access denied — OrganicMart{% endblock %}
+{% block content %}
+<section class="error-page container text-center"><p class="eyebrow justify-content-center">Error 403</p><h1>You do not have access to this page.</h1><p>Sign in with the correct account or return to the marketplace.</p><a class="btn btn-brand" href="{% url 'core:home' %}">Return home</a></section>
+{% endblock %}

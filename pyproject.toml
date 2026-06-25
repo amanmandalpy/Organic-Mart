@@ -1,0 +1,76 @@
+[project]
+name = "organicmart"
+version = "0.1.0"
+description = "Production-oriented organic products marketplace"
+requires-python = ">=3.13,<3.14"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["apps", "api", "tests"]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+    "--disable-warnings",
+    "--cov=apps",
+    "--cov=api",
+    "--cov=config",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-fail-under=80",
+]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "config/settings/*",
+    "manage.py",
+    "config/asgi.py",
+    "config/wsgi.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = [
+    "A", "ARG", "B", "C4", "DJ", "E", "F", "I", "N", "PERF", "PIE",
+    "PL", "PTH", "RUF", "S", "SIM", "T20", "UP", "W",
+]
+ignore = [
+    "DJ001",  # Nullable text fields are intentional for selected lifecycle data.
+    "S101",   # Assertions are the normal language of pytest tests.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"config/settings/*.py" = ["F403", "F405"]
+"manage.py" = ["PLC0415"]
+"**/tests/*.py" = ["ARG001", "PLR2004", "S106"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["api", "apps", "config"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main"]
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"

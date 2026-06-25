@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order Confirmed - OrganicMart{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="success-card mx-auto text-center">
+            <span class="success-card__icon">✓</span>
+            <p class="eyebrow justify-content-center mb-3"><span aria-hidden="true">●</span> Order confirmed</p>
+            <h1>Thank you for shopping organic.</h1>
+            <p>Your order has been received. The order module can now be extended with order ID, payment status, delivery tracking, invoice, and email confirmation.</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+                <a class="btn btn-brand" href="{% url 'catalog:product-list' %}">Shop more</a>
+                <a class="btn btn-soft" href="{% url 'accounts:profile' %}">View account</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

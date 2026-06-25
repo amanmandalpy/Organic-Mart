@@ -1,0 +1,36 @@
+<article class="product-card h-100">
+    <a class="product-card__media" href="{{ product.get_absolute_url }}" aria-label="View {{ product.name }}">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+        {% else %}
+            <span>{{ product.image_emoji }}</span>
+        {% endif %}
+        {% if product.discount_percent %}
+            <strong>{{ product.discount_percent }}% OFF</strong>
+        {% endif %}
+    </a>
+    <div class="product-card__body">
+        <div class="d-flex justify-content-between gap-2 align-items-start">
+            <small class="product-card__category">{{ product.category.name }}</small>
+            <small class="product-card__rating">★ {{ product.rating_average }}</small>
+        </div>
+        <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+        <p>{{ product.short_description }}</p>
+        <div class="product-card__price">
+            <strong>₹{{ product.final_price }}</strong>
+            {% if product.discount_percent %}
+                <span>₹{{ product.price }}</span>
+            {% endif %}
+        </div>
+        <div class="product-card__actions">
+            <a class="btn btn-soft btn-sm" href="{{ product.get_absolute_url }}">View details</a>
+            <form method="post" action="{% url 'cart:add' product.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="btn btn-brand btn-sm" type="submit" {% if not product.is_in_stock %}disabled{% endif %}>
+                    {% if product.is_in_stock %}Add to cart{% else %}Out of stock{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,23 @@
+:root {
+    --color-forest-950: #102f21;
+    --color-forest-900: #173d2a;
+    --color-forest-800: #214e34;
+    --color-forest-700: #2e6845;
+    --color-leaf-500: #7cae45;
+    --color-leaf-400: #9bc568;
+    --color-lime-100: #eef6df;
+    --color-cream-50: #fcfbf5;
+    --color-cream-100: #f6f3e8;
+    --color-earth-500: #a56e43;
+    --color-ink: #1b2620;
+    --color-muted: #637168;
+    --color-border: #dfe5dc;
+    --color-white: #ffffff;
+    --color-danger: #a33a35;
+    --shadow-sm: 0 8px 24px rgba(26, 60, 41, 0.08);
+    --shadow-lg: 0 24px 70px rgba(26, 60, 41, 0.16);
+    --radius-sm: 0.75rem;
+    --radius-md: 1.25rem;
+    --radius-lg: 2rem;
+    --transition: 180ms ease;
+}

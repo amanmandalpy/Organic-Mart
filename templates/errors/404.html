@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Page not found — OrganicMart{% endblock %}
+{% block content %}
+<section class="error-page container text-center"><p class="eyebrow justify-content-center">Error 404</p><h1>This page has wandered off the path.</h1><p>The address may be incorrect, or the page may have moved.</p><a class="btn btn-brand" href="{% url 'core:home' %}">Return home</a></section>
+{% endblock %}

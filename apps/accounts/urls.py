@@ -1,0 +1,14 @@
+"""Customer account routes."""
+
+from django.urls import path
+
+from apps.accounts import views
+
+app_name = "accounts"
+
+urlpatterns = [
+    path("register/", views.register, name="register"),
+    path("login/", views.CustomerLoginView.as_view(), name="login"),
+    path("logout/", views.CustomerLogoutView.as_view(), name="logout"),
+    path("profile/", views.profile, name="profile"),
+]

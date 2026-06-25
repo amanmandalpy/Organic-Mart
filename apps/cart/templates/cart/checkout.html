@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout — OrganicMart{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'src/css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section-space">
+    <div class="container">
+        <div class="section-heading mb-4">
+            <p class="eyebrow mb-3"><span aria-hidden="true">●</span> Secure checkout</p>
+            <h1>Checkout</h1>
+            <p>Review shipping details, payment method, and order summary before placing your order.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <form method="post" class="checkout-form">
+                    {% csrf_token %}
+                    <div class="info-panel mb-4">
+                        <h2>Shipping address</h2>
+                        <div class="row g-3">
+                            <div class="col-md-6"><input class="form-control" required placeholder="Full name" value="{{ request.user.get_full_name|default:'OrganicMart Customer' }}"></div>
+                            <div class="col-md-6"><input class="form-control" required placeholder="Phone" value="9876543210"></div>
+                            <div class="col-12"><input class="form-control" required placeholder="Address line" value="221 Green Street, Organic City"></div>
+                            <div class="col-md-6"><input class="form-control" required placeholder="City" value="Pune"></div>
+                            <div class="col-md-3"><input class="form-control" required placeholder="State" value="MH"></div>
+                            <div class="col-md-3"><input class="form-control" required placeholder="PIN" value="411001"></div>
+                        </div>
+                    </div>
+                    <div class="info-panel mb-4">
+                        <h2>Payment method</h2>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment" id="payment-razorpay" checked>
+                            <label class="form-check-label" for="payment-razorpay">Razorpay secure payment</label>
+                        </div>
+                    </div>
+                    <button class="btn btn-brand btn-lg" type="submit">Place order</button>
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <aside class="summary-card">
+                    <h2>Order summary</h2>
+                    {% for line in summary.lines %}
+                        <div><span>{{ line.product.name }} × {{ line.quantity }}</span><strong>₹{{ line.line_total }}</strong></div>
+                    {% endfor %}
+                    <hr>
+                    <div><span>Subtotal</span><strong>₹{{ summary.subtotal }}</strong></div>
+                    <div><span>Discount</span><strong>- ₹{{ summary.discount }}</strong></div>
+                    <div><span>Shipping</span><strong>₹{{ summary.shipping }}</strong></div>
+                    <div class="summary-card__total"><span>Total</span><strong>₹{{ summary.total }}</strong></div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
