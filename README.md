@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OrganicMart
 
 OrganicMart is a production-oriented organic products marketplace built with
@@ -231,3 +232,6 @@ Before real live deployment:
 - [Local development runbook](docs/runbooks/local-development.md)
 - [Deployment guide](docs/runbooks/deployment.md)
 - [Razorpay payment gateway guide](docs/runbooks/razorpay-payment-gateway.md)
+=======
+# Organic-Mart
+>>>>>>> bb128c8f7e8395ac957390a66c835981c49103e8
